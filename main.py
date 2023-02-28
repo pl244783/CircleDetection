@@ -9,7 +9,7 @@ dp = 1
 minDist = 1000000000
 param1 = 50
 param2 = 30
-minRadius = 0
+minRadius = 70
 maxRadius = 0
 
 while cap.isOpened():
@@ -26,10 +26,10 @@ while cap.isOpened():
         if circles is not None:
             circles = np.round(circles[0, :]).astype("int")
             for (x, y, r) in circles:
-                cv2.circle(frame, (x, y), r, (0, 255, 0), 2)
+                cv2.circle(gray, (x, y), r, (0, 255, 0), 2)
 
         # Display the resulting frame
-        cv2.imshow("Circle Detection", frame)
+        cv2.imshow("Circle Detection", gray)
 
         # Exit the loop if the 'q' key is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
