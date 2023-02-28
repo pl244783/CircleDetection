@@ -1,23 +1,42 @@
 import cv2
 import numpy as np
 
+# Load the video file
+cap = cv2.VideoCapture('your_video_file.mp4')
 
-img = cv2.imread('circle.png')
-output = img.copy()
+# Define the parameters for circle detection
+dp = 1
+minDist = 20
+param1 = 50
+param2 = 30
+minRadius = 0
+maxRadius = 0
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-# detect circles in the image
-circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 100000)
-# ensure at least some circles were found
-if circles is not None:
-    # convert the (x, y) coordinates and radius of the circles to integers
-    circles = np.round(circles[0, :]).astype("int")
-    # loop over the (x, y) coordinates and radius of the circles
-    for (x, y, r) in circles:
-        # draw the circle in the output image, then draw a rectangle
-        # corresponding to the center of the circle
-        cv2.circle(output, (x, y), r, (0, 255, 0), 4)
-        cv2.rectangle(output, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
-    # show the output image
-    cv2.imshow("output", np.hstack([img, output]))
-    cv2.waitKey(0)
+while cap.isOpened():
+    # Read each frame of the video file
+    ret, frame = cap.read()
+    if ret:
+        # Convert the frame to grayscale
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        # Apply circle detection using HoughCircles method
+        circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=param1, param2=param2, minRadius=minRadius, maxRadius=maxRadius)
+
+        # If circles are detected, draw them on the frame
+        if circles is not None:
+            circles = np.round(circles[0, :]).astype("int")
+            for (x, y, r) in circles:
+                cv2.circle(frame, (x, y), r, (0, 255, 0), 2)
+
+        # Display the resulting frame
+        cv2.imshow("Circle Detection", frame)
+
+        # Exit the loop if the 'q' key is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    else:
+        break
+
+# Release the video capture and destroy any open windows
+cap.release()
+cv2.destroyAllWindows()
