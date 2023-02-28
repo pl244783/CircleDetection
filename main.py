@@ -2,11 +2,11 @@ import cv2
 import numpy as np
 
 # Load the video file
-cap = cv2.VideoCapture('your_video_file.mp4')
+cap = cv2.VideoCapture('circleVid.MOV')
 
 # Define the parameters for circle detection
 dp = 1
-minDist = 20
+minDist = 1000000000
 param1 = 50
 param2 = 30
 minRadius = 0
